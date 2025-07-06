@@ -1,0 +1,3 @@
+# framework needs to be installed
+Django==5.2.4
+djangorestframework==5.2.4

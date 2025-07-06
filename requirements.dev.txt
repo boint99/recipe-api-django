@@ -1,0 +1,2 @@
+# framework needs to be installed
+flake8==7.3.0
