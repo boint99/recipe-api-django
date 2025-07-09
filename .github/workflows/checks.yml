@@ -9,6 +9,7 @@ on:
 jobs:
   test-lint:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -16,14 +17,17 @@ jobs:
       - name: Set up Docker Compose
         run: docker compose version
 
-      - name: Build containers
-        run: docker compose build
+      - name: Build and start services
+        run: docker compose up -d --build
+
+      - name: Wait for DB to be ready (nếu có)
+        run: sleep 10
 
       - name: Lint with flake8
         run: docker compose run --rm app sh -c "flake8"
 
       - name: Run Django tests
-        run: docker compose run --rm app sh -c "python manage.py test"
+        run: docker compose exec app python manage.py test --no-input
 
       - name: Shutdown containers
         run: docker compose down
