@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  docker-tests:
+  test-lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,10 +20,9 @@ jobs:
       - name: Build containers
         run: docker compose build
 
-      - name: Run tests
-        run: docker compose run --rm app sh -c "flake8"
-
-      - name: Run flake8 lint (optional)
+      - name: Lint with flake8
         run: docker compose run --rm app sh -c "flake8"
       - name: Run Django tests
         run: docker compose run --rm app sh -c "python manage.py test"
+      - name: Shutdown containers
+        run: docker compose down
