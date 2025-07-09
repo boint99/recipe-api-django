@@ -26,4 +26,4 @@ jobs:
       - name: Run flake8 lint (optional)
         run: docker compose run --rm app sh -c "flake8"
       - name: Run Django tests
-        run: docker compose run --rm app sh -c "python manage.py wait_for_db &&python manage.py test"
+        run: docker compose run --rm app sh -c "python manage.py test"
