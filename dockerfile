@@ -51,23 +51,20 @@ FROM python:3.11-slim
 
 LABEL maintainer="TIỂU BỐI HỌC CODE"
 
-# Không tạo .pyc, __pycache__, log ngay stdout
+# Không tạo file .pyc và log ra stdout để dễ debug
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Làm việc trong /app
+# Thư mục làm việc trong container
 WORKDIR /app
 
-# Cài pip và các thư viện Python
-COPY ./requirements.txt /tmp/requirements.txt
-COPY ./requirements.dev.txt /tmp/requirements.dev.txt
-# Mở port Django
+# Expose port để chạy Django server
 EXPOSE 8000
 
-# Biến dùng khi build để xác định môi trường dev
+# Biến môi trường xác định có cài tool dev không
 ARG DEV=False
 
-# Cài các gói hệ thống cần cho psycopg2
+# Cài các gói hệ thống cần thiết (psycopg2, build)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     build-essential \
@@ -75,14 +72,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     passwd \
     && rm -rf /var/lib/apt/lists/*
 
-# Tạo virtualenv tại /py
+# Tạo môi trường ảo tại /py
 RUN python -m venv /py
 ENV PATH="/py/bin:$PATH"
 
-# Cài pip và các gói yêu cầu
-COPY ./requirements.txt /tmp/
-COPY ./requirements.dev.txt /tmp/
+# Copy file requirements để cài thư viện
+COPY ./requirements.txt /tmp/requirements.txt
+COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 
+# Cài pip và các thư viện cần thiết (kể cả flake8 nếu DEV=True)
 RUN pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt && \
     if [ "$DEV" = "True" ]; then \
@@ -90,9 +88,9 @@ RUN pip install --upgrade pip && \
     fi && \
     rm -rf /tmp/*
 
-# Copy mã nguồn vào container
+# Copy toàn bộ source code vào container
 COPY ./app /app
 
-# Tạo user không cần quyền root
+# Tạo user không chạy bằng root
 RUN useradd -m django-user
 USER django-user
