@@ -29,17 +29,12 @@
 # RUN python -m venv /py && \
 #     /py/bin/pip install --upgrade pip && \
 #     /py/bin/pip install -r /tmp/requirements.txt && \
-#     /gcc && \
-#     /build-essential && \
-#     /libpq-dev && \
-#     && rm -rf /var/lib/apt/lists/* && \
 #     /py/bin/pip install -r /tmp/requirements.dev.txt && \
 #     if [ "$DEV" = "True" ]; then \
 #     /py/bin/pip install -r /tmp/requirements.dev.txt ; \
 #     fi && \
 #     rm -rf /tmp
 
-# # tạo user không cần root
 # RUN useradd -m django-user
 # USER django-user
 
@@ -61,7 +56,7 @@ WORKDIR /app
 # Expose port để chạy Django server
 EXPOSE 8000
 
-# Biến môi trường xác định có cài tool dev không
+# Cài pip và các thư viện Python
 ARG DEV=False
 
 # Cài các gói hệ thống cần thiết (psycopg2, build)
@@ -94,3 +89,4 @@ COPY ./app /app
 # Tạo user không chạy bằng root
 RUN useradd -m django-user
 USER django-user
+
