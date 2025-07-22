@@ -12,7 +12,12 @@ jobs:
 
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
+      - name: Checkout source code
+        uses: actions/checkout@v3
+        with:
+          username: ${{ secrets.DJANGO_USER }}
+          password: ${{ secrets.DJANGO_TOKEN }}
 
       - name: Set up Docker Compose
         run: docker compose version
