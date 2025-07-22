@@ -7,6 +7,13 @@ LABEL maintainer="Hoc Code"
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+# Copy file requirements vào container
+COPY ./requirements.txt /tmp/requirements.txt
+COPY ./requirements.dev.txt /tmp/requirements.dev.txt
+# Copy source code vào container
+COPY ./app /app
+
+
 # Thư mục làm việc trong container
 WORKDIR /app
 
@@ -15,6 +22,7 @@ EXPOSE 8000
 
 # Biến để xác định môi trường dev
 ARG DEV=False
+ENV DEV=${DEV}
 
 # Cài các gói hệ thống cần thiết cho build và psycopg2
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -30,10 +38,6 @@ RUN python -m venv /py
 # Thêm venv vào PATH
 ENV PATH="/py/bin:$PATH"
 
-# Copy file requirements vào container
-COPY ./requirements.txt /tmp/requirements.txt
-COPY ./requirements.dev.txt /tmp/requirements.dev.txt
-
 # Cài pip + requirements (bao gồm flake8 nếu DEV=True)
 RUN pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt && \
@@ -41,9 +45,6 @@ RUN pip install --upgrade pip && \
     pip install -r /tmp/requirements.dev.txt ; \
     fi && \
     rm -rf /tmp/*
-
-# Copy source code vào container
-COPY ./app /app
 
 
 # Tạo user không cần quyền root
