@@ -45,6 +45,7 @@ RUN pip install --upgrade pip && \
 # Copy source code vào container
 COPY ./app /app
 
+
 # Tạo user không cần quyền root
 RUN useradd -m django-user
 USER django-user
