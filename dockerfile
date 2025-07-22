@@ -46,7 +46,6 @@ RUN pip install --upgrade pip && \
     fi && \
     rm -rf /tmp/*
 
-
 # Tạo user không cần quyền root
 RUN useradd -m django-user
 USER django-user
