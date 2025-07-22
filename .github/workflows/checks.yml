@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
-      - name: Checkout source code
+      - name: login to docker hub
         uses: actions/checkout@v3
         with:
           username: ${{ secrets.DJANGO_USER }}
@@ -32,7 +32,7 @@ jobs:
         run: docker compose run --rm app sh -c "flake8"
 
       - name: Run Django tests
-        run: docker compose exec app python manage.py test --no-input
+        run: docker compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test"
 
       - name: Shutdown containers
         run: docker compose down
