@@ -25,9 +25,6 @@ jobs:
       - name: Build and start services
         run: docker compose up -d --build
 
-      - name: Wait for DB to be ready (nếu có)
-        run: sleep 10
-
       - name: Lint with flake8
         run: docker compose run --rm app sh -c "flake8"
 
