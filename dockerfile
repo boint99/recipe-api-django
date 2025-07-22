@@ -22,7 +22,7 @@ EXPOSE 8000
 
 # Biến để xác định môi trường dev
 ARG DEV=False
-ENV DEV=${DEV}
+
 
 # Cài các gói hệ thống cần thiết cho build và psycopg2
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -34,7 +34,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Tạo thư mục virtualenv riêng biệt
 RUN python -m venv /py
-
+ENV DEV=${DEV}
 # Thêm venv vào PATH
 ENV PATH="/py/bin:$PATH"
 
