@@ -20,7 +20,7 @@ class AminSiteTest(TestCase):
         )
         self.client.force_login(self.admin_user)
         self.user = get_user_model().objects.create_user(
-            user='user@example.com',
+            email='user@example.com',
             password='user@123',
             name='Test User'
         )
@@ -35,7 +35,16 @@ class AminSiteTest(TestCase):
 
     def test_edit_user_page(self):
         """Test the edit user page works."""
-        url = reversed('admin:core_user_change', args=[self.user.id])
+
+        url = reverse('admin:core_user_change', args=[self.user.id])
         res = self.client.get(url)
 
         self.assertEqual(res.status_code, 200)
+
+    def test_create_user_page(self):
+        """Test the create user page work."""
+
+        url = reverse("admin:core_user_add")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
