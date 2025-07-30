@@ -12,9 +12,11 @@ class UserAdmin(BaseUserAdmin):
     """Define the admin pages for users."""
     ordering = ['id']
     list_display = ['email', 'name']
+    list_fields = ['email', 'name']
+    list_filter = ['is_staff', 'is_superuser', 'is_active']
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (_('permissions'), {
+        (_('Permissions'), {
             'fields': (
                 'name',
                 'is_active',
@@ -29,11 +31,13 @@ class UserAdmin(BaseUserAdmin):
         (None, {
             'classes': ('wide',),
             'fields': (
+                'name',
+                'email',
                 'password1',
                 'password2',
-                'name',
-                'is_superuser',
                 'is_staff',
+                'groups',
+                'user_permissions',
             )
         }),
     )
